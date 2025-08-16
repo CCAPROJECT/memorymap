@@ -5,15 +5,26 @@
     <title>Memory Map</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="icon" href="ccalogo.png" type="image/png" />
-    <link rel="preload" as="image" href="world-map.jpg">
 
+    <!-- Preload image for faster rendering -->
+    <link rel="preload" as="image" href="world-map.jpg" fetchpriority="high">
   </head>
   <body>
     <canvas id="canvas"></canvas>
     <div id="tooltip" class="label"></div>
 
+    <!-- Hidden image (forces browser to cache it quickly) -->
+    <img 
+      id="preloadImage" 
+      src="world-map.jpg" 
+      alt="World Map" 
+      loading="lazy" 
+      fetchpriority="high" 
+      style="display:none;" 
+    />
+
     <!-- 🔁 Rotate Notice Overlay -->
-    <div id="rotate-notice" style="display:none; position:fixed; z-index:1000; background:black; color:white; font-size:1.5em; width:100%; height:100%; justify-content:center; align-items:center;">
+    <div id="rotate-notice" style="display:none; position:fixed; z-index:1000; background:black; color:white; font-size:1.5em; width:100%; height:100%; display:flex; justify-content:center; align-items:center;">
       Please rotate your device to landscape mode for the best experience.
     </div>
 
