@@ -6,36 +6,41 @@
     <link rel="stylesheet" href="style.css" />
     <link rel="icon" href="ccalogo.png" type="image/png" />
 
-    <!-- 🚀 Preload main map image -->
+    <!-- 🚀 Preload full map for faster access -->
     <link rel="preload" as="image" href="world-map.jpg" />
 
-    <!-- 👀 Hint browser to fetch aggressively -->
-    <link rel="prefetch" href="world-map.jpg" as="image" />
+    <!-- 🚀 Lazyload polyfill (for browsers that need it) -->
+    <script>
+      if ("loading" in HTMLImageElement.prototype === false) {
+        let script = document.createElement("script");
+        script.src =
+          "https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver";
+        document.head.appendChild(script);
+      }
+    </script>
   </head>
   <body>
     <canvas id="canvas"></canvas>
     <div id="tooltip" class="label"></div>
 
     <!-- 🔁 Rotate Notice Overlay -->
-    <div id="rotate-notice" style="display:none; position:fixed; z-index:1000; background:black; color:white; font-size:1.5em; width:100%; height:100%; justify-content:center; align-items:center;">
+    <div
+      id="rotate-notice"
+      style="display:none; position:fixed; z-index:1000; background:black; color:white; font-size:1.5em; width:100%; height:100%; justify-content:center; align-items:center;"
+    >
       Please rotate your device to landscape mode for the best experience.
     </div>
 
-    <!-- 🖼️ Hidden image preloader (loads faster into cache) -->
-    <img 
-      src="world-map.jpg" 
-      alt="World Map Preloader" 
-      style="display:none;" 
-      width="1" height="1"
-      fetchpriority="high" 
-      decoding="async" 
+    <!-- Hidden preloaded image (ensures caching before canvas uses it) -->
+    <img
+      id="preload-map"
+      src="world-map.jpg"
+      alt="world map"
+      style="display:none"
+      loading="eager"
+      fetchpriority="high"
     />
 
-    <script src="map.js"></script>
-
-    <!-- ✅ Noscript fallback -->
-    <noscript>
-      <img src="world-map.jpg" alt="World Map" style="width:100%;" />
-    </noscript>
+    <script src="map.js" defer></script>
   </body>
 </html>
