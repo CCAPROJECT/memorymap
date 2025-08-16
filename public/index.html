@@ -5,8 +5,12 @@
     <title>Memory Map</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="icon" href="ccalogo.png" type="image/png" />
-    <link rel="preload" as="image" href="world-map.jpg">
 
+    <!-- 🚀 Preload main map image -->
+    <link rel="preload" as="image" href="world-map.jpg" />
+
+    <!-- 👀 Hint browser to fetch aggressively -->
+    <link rel="prefetch" href="world-map.jpg" as="image" />
   </head>
   <body>
     <canvas id="canvas"></canvas>
@@ -17,6 +21,21 @@
       Please rotate your device to landscape mode for the best experience.
     </div>
 
+    <!-- 🖼️ Hidden image preloader (loads faster into cache) -->
+    <img 
+      src="world-map.jpg" 
+      alt="World Map Preloader" 
+      style="display:none;" 
+      width="1" height="1"
+      fetchpriority="high" 
+      decoding="async" 
+    />
+
     <script src="map.js"></script>
+
+    <!-- ✅ Noscript fallback -->
+    <noscript>
+      <img src="world-map.jpg" alt="World Map" style="width:100%;" />
+    </noscript>
   </body>
 </html>
