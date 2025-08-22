@@ -27,22 +27,22 @@ const mapImg = new Image();
 mapImg.src = 'world-map.jpg';
 
 const nodes = [
-  { name: "Africa", xRatio: 0.554, yRatio: 0.48, color: "black", link: "https://drive.google.com/drive/folders/1uh7xhju8vr7qaGvfxSwdetxghjaExShr?usp=drive_link" },
-  { name: "Europe", xRatio: 0.54, yRatio: 0.23, color: "blue", link: "https://drive.google.com/drive/folders/1TxImjvrWV8ZbMBczkBHboP_XBMZEZWDC?usp=drive_link" },
-  { name: "Asia", xRatio: 0.73, yRatio: 0.19, color: "yellow", link: "https://drive.google.com/drive/folders/1wZDQDcx_tvWG-epal5AK9BX74W9gxmXX?usp=drive_link" },
-  { name: "North America", xRatio: 0.26, yRatio: 0.28, color: "red", link: "https://drive.google.com/drive/folders/1um7pugbMnzJBz8nOoug2CKC6vCUkMDBM?usp=drive_link" },
-  { name: "South America", xRatio: 0.35, yRatio: 0.60, color: "green", link: "https://drive.google.com/drive/folders/1Cy-VQYlAqQ7jNlFCFxVnBZGbPKcG7zoJ?usp=drive_link" },
-  { name: "Australia", xRatio: 0.81, yRatio: 0.68, color: "orange", link: "https://drive.google.com/drive/folders/1kz2mvuWANTBsy7egWegv55c2WfCuvODL?usp=drive_link" },
-  { name: "Antarctica", xRatio: 0.59, yRatio: 0.90, color: "cyan", link: "https://drive.google.com/drive/folders/1IkjVZOYbDHP0uAhsQImEW5MKDn92kTm0?usp=drive_link" }
+  { name: "Africa", xRatio: 0.554, yRatio: 0.48, color: "black" },
+  { name: "Europe", xRatio: 0.54, yRatio: 0.23, color: "blue" },
+  { name: "Asia", xRatio: 0.73, yRatio: 0.19, color: "yellow" },
+  { name: "North America", xRatio: 0.26, yRatio: 0.28, color: "red" },
+  { name: "South America", xRatio: 0.35, yRatio: 0.60, color: "green" },
+  { name: "Australia", xRatio: 0.81, yRatio: 0.68, color: "orange" },
+  { name: "Antarctica", xRatio: 0.59, yRatio: 0.90, color: "cyan" }
 ];
 
 const countryAnchors = [
-  { name: "Nigeria", xRatio: 0.515, yRatio: 0.45, color: "black", continent: "Africa", flagColors: ["green", "white", "green"] },
-  { name: "France", xRatio: 0.52, yRatio: 0.25, color: "blue", continent: "Europe", flagColors: ["blue", "white", "red"] },
-  { name: "China", xRatio: 0.76, yRatio: 0.24, color: "yellow", continent: "Asia", flagColors: ["red", "gold"] },
-  { name: "Brazil", xRatio: 0.37, yRatio: 0.63, color: "green", continent: "South America", flagColors: ["green", "yellow", "blue"] },
-  { name: "Canada", xRatio: 0.26, yRatio: 0.19, color: "red", continent: "North America", flagColors: ["red", "white"] },
-  { name: "Sydney", xRatio: 0.84, yRatio: 0.69, color: "orange", continent: "Australia", flagColors: ["blue", "red", "white"] },
+  { name: "Nigeria", xRatio: 0.515, yRatio: 0.45, color: "black", continent: "Africa", flagColors: ["green", "white", "green"], link: "https://drive.google.com/drive/folders/1uh7xhju8vr7qaGvfxSwdetxghjaExShr?usp=drive_link" },
+  { name: "France", xRatio: 0.52, yRatio: 0.25, color: "blue", continent: "Europe", flagColors: ["blue", "white", "red"], link: "https://drive.google.com/drive/folders/1TxImjvrWV8ZbMBczkBHboP_XBMZEZWDC?usp=drive_link" },
+  { name: "China", xRatio: 0.76, yRatio: 0.24, color: "yellow", continent: "Asia", flagColors: ["red", "gold"], link: "https://drive.google.com/drive/folders/1wZDQDcx_tvWG-epal5AK9BX74W9gxmXX?usp=drive_link" },
+  { name: "Brazil", xRatio: 0.37, yRatio: 0.63, color: "green", continent: "South America", flagColors: ["green", "yellow", "blue"], link: "https://drive.google.com/drive/folders/1Cy-VQYlAqQ7jNlFCFxVnBZGbPKcG7zoJ?usp=drive_link" },
+  { name: "Canada", xRatio: 0.26, yRatio: 0.19, color: "red", continent: "North America", flagColors: ["red", "white"], link: "https://drive.google.com/drive/folders/1um7pugbMnzJBz8nOoug2CKC6vCUkMDBM?usp=drive_link" },
+  { name: "Sydney", xRatio: 0.84, yRatio: 0.69, color: "orange", continent: "Australia", flagColors: ["blue", "red", "white"], link: "https://drive.google.com/drive/folders/1kz2mvuWANTBsy7egWegv55c2WfCuvODL?usp=drive_link" },
   { name: "South Pole", xRatio: 0.59, yRatio: 0.93, color: "cyan", continent: "Antarctica", flagColors: ["white", "blue"] }
 ];
 
@@ -102,7 +102,9 @@ function generateContinentParticles() {
       radius,
       speed,
       color: anchor.color,
-      glow: true
+      glow: true,
+      link: anchor.link || null,
+      name: anchor.name
     });
   }
 }
@@ -212,16 +214,38 @@ canvas.addEventListener("touchmove", (e) => {
     mouse.y = e.touches[0].clientY;
   }
 });
+
 canvas.addEventListener("click", (e) => {
   const mouseX = e.clientX;
   const mouseY = e.clientY;
+
+  // ✅ Disable continent node clicks (links removed)
   for (let node of nodes) {
     const x = node.xRatio * window.innerWidth;
     const y = node.yRatio * window.innerHeight;
     const dx = mouseX - x;
     const dy = mouseY - y;
     if (Math.abs(dx) < 10 && Math.abs(dy) < 10) {
-      window.open(node.link, "_blank");
+      // Do nothing, continent links are disabled
+      return;
+    }
+  }
+
+  // ✅ Country particles remain clickable
+  for (let p of continentParticles) {
+    if (p.glow && p.link) {
+      const centerX = p.centerXRatio * window.innerWidth;
+      const centerY = p.centerYRatio * window.innerHeight;
+      const px = centerX + Math.cos(p.angle) * p.radius;
+      const py = centerY + Math.sin(p.angle) * p.radius;
+
+      const dx = mouseX - px;
+      const dy = mouseY - py;
+
+      if (dx * dx + dy * dy < 100) { // within 10px radius
+        window.open(p.link, "_blank");
+        return;
+      }
     }
   }
 });
